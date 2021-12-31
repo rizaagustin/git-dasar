@@ -1,2 +1,2 @@
 Menambah file1.txt
-Feature 1
+feature1

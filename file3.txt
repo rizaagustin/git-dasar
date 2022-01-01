@@ -2,3 +2,4 @@ ini adalah file3.txt
 masih ada baris baru
 featur 3
 feature/b
+feature/c

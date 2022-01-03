@@ -3,3 +3,4 @@ feature1
 feature/a
 feature/b
 feature/c
+master

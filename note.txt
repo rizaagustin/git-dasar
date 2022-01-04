@@ -1,0 +1,187 @@
+// configurasi
+setting email dan name
+git config --global user.name "Riza Agustin"
+git config --global user.email "rizaagustin20@gmail.com"
+
+defaul code editor vs code agar perbedaannya tidak dilihat diterminal tapi di vs code
+git config --global core.editor "code --wait"
+git config --global diff.tool "default-difftool"
+git config --global difftool.default-difftool.cmd "code --wait --dif \$LOCAL \$REMOTE"
+git config --list --show-origin
+
+// masuk ke folder projek dengan perintah cd ata mkdir apabila belum dibuat
+git init // sukses apabila ada fole .git
+code . // agar vs code terbuka
+
+// repository = projek baru
+
+Basic dari git work flow
+diagram theree
+1. working directory -git add
+2. staging index -git add
+3. repository -git commit
+
+git add file2.txt // menambahkan ke staging index untuk 1 file
+git add file1.txt file2.txt // menambahkan ke staging index untuk lebih dari 1 file
+git add . // menambahkan ke staging index untuk semua perubaha
+
+git commit -m "Menambahkan file2.txt" //menyimpan permanen
+git diff untuk melihat perubahan pada file merah yang lama hijau yg baru
+
+untuk peghapusan file tetap harus melalu git add dan commit agar tersimpan perubahan
+
+git clean -f //untuk membatalkan penambahan file //hanya diworking directory
+git restore file1.txt //untuk membatalkan perubah/penghapusan pada file yg dirubah //hanya diworking directory
+
+git restore --staged file2.txt //membatalkan perubahan atau penghapusan apabila sudah terlanjur masuk ke staging index atau sudah di git add
+
+git log //untuk melihat riwayat commit
+git log --oneline //untuk melihat riwayat commit lebih ringkas
+git log --oneline --graph //untuk melihat branching
+git show 7c2066a(hash) // melihat detail commit atau pada has
+git show head //untuk melihat perubahan terakhir
+git diff hash1 hash2 //compare commit untuk melihat perbebedaan 
+git difftool head hash1 //compare untuk melihat perbedaan di vs code
+git reset --soft 20a10e0 //mereset ke has tersebut perubahan sebelumnya pindah ke staging index
+git reset --mixed 20a10e0 //mereset ke has tersebut perubahan sebelumnya pindah ke working direcroty
+git reset --hard 20a10e0 //mereset ke has tersebut perubahan sebelumnya terhapus 	
+git commit --amend -m "deskripsi" //untuk memasukan pada komit sebelumnya ketika ada script tertinggal ->git add->commit
+
+kadang ada masalah di 1 file kita bisa lihat versi sebelumnya 
+git checkout ee5c73a -- file3.txt
+
+apabila tidak jadi menyimpan perubaha di atas
+git restore --staged file3.txt //menghapus dari staging area
+git resore file3.txt //menghapus dari working directory
+
+untuk kembali ke snapsot snapsot sebelumnya
+git branch --show-current //untuk melihat branch saat ini
+git checkout 7bee92b //untuk melihat snapsoot sebelumnya/has tersebut
+git checkout master //untuk pindah langsung ke paling depan
+git revert 8af695e // untuk membatalkan commit yang sudah di lakukan tapi perubahannya hilang lognya ada
+git blame file3.txt //untuk mengetahui siapa yg commit dan menambahkan code program
+
+
+GIT BRANCH
+dafault git branch utamanya main atau master
+ 
+membuat branch baru akan dimulai dari posisi branch kita saat ini
+apabila sedang di master maka branch tersebut di buat dari branch master
+git branch --show-current //untuk melihat nama branch saat ini
+git branch nama branch (develop) //untuk membuat branch
+git branch --list atau git branch //untuk melihat list branch
+git switch nama branch atau git checkout nama branch //untuk pindah branch
+git branch -m namabracnhbaru //untuk rename branch baru tapi harus pada branch terbesut
+git branch -d namabranch git branch --delete namabaranch //menghapus branch, tapi harus keluar dari branch tersebut
+
+MULTIPLE BRANCH
+git mendukung mulitple branch
+git log --oneline --graph
+
+MERGE 
+merge proses dimana kita melakuak penggabungan dua branch
+jika ingin merge feature1 maka kita pindah ke tempat dituju contoh master dengan git chekout
+lalu git merge feature1
+
+MERGER CONFLICT
+jika terjadi conflict maka wajib memperbaikinya dulu & tidak ada cara otomatis perbaiki manual
+- perubahan yang tidak conflict masuk ke staging index
+- perubahan yang conflict masuk ke working directory
+lalu gunakan git add nama file lalu commit -m "fixr merge conflict"
+git merge --abort //membatalkan merge
+
+git conflict apabila 2 programmer merubah 1 file dan di merge maka akan menimbulkan conflict
+maka harus di lakukan manual merubah script, kalau sudah di git add dan di commit
+
+* CHERY PICK
+kadang ada kasus ketika kita membuat kode program di sebuah branch kita  ingin melakukan merger,
+namu tidak ingin melakukan merge ke sebuah branch nya, mungkin hanya sebagian commit saja
+
+cherry pick merupaka fitur yg digunakan untuk mengambil commit dari branch manapun dan kita merge ke dalam branch saat ini
+buat branch feature3
+modif file1 sampai 4 lalu commit
+lalu kita merge hanya commitnya saja tidak semua file dengan menggunakan hash
+git cherry-pick f656246 //merge dengan branch master, commit tidak semua branch menggunakan hash
+
+* TAG
+git tag tagName commit 
+tag merupaka fitur untuk menandai commit id
+dalam pengembangan perangka tlunak tag digunakan sebagai versi rilis aplikasi misal 1.0.0 dan tag 1.0.2 dll
+tag merupakan refrence ke commit jadi tag bisa dilakukan di branch manapun
+1 TAG 1COMMIT dan nama tidak boleh sama karena unik
+
+git tag tagName commitid
+
+buat file version.txt lalu isi dengan informasi versi
+1.0.0 lalu commit dan buat tag
+1.0.1 lalu commit dan buat tag
+1.0.2 lalu commit dan buat tag
+
+git tag 1.0.2 289c729 // membuat tag 1.0.2 dengan commit id
+git checkout 1.0.2 //kita bisa checkout dengan tag
+git tag -l //untuk melihat semua tag yg sudah dibuat
+git tag -d 1.0.1 // untuk menghapus tag
+
+* STASH (terjadi konflik saat perubahan branch tapi tidak mau commit/belum siap)
+kadang keadaan dimana kita sedang melakukan perubahan di sebuah branch
+namun perubahannya belum disimpan di repository, misal masih di working atau staging index
+lalu kita butuh secepatnya melakukan perubahan di branch lain
+jika perubahan tersebut belum siap maka kita bisa menyimpan perubahannya ke stash
+stash merupakan tempat penyimpanan perubahan sementara di working dan staging index
+agar branch saat ini kembali menjadi bersih
+
+git stash push -m 'messaget stash/deskripsi' //membuat stash
+git stash list //melihat daftar stash
+git stash show 0 //untuk melihat perubaha file apa aja
+git stash apply stashId atau 0 // untuk mengambil perubaha di stash tapi harus masuk ke branch tersebut
+git stash drop stashId atau 0 // menghapus stashId
+git stash clear // menghapus semua stash
+
+* REBASH
+
+* SQUASH
+Berguna untuk menggabungka beberapa commit history menjadi 1
+git merger --squash namabracnh //untuk melakukan squah ketika merge
+Jadi commit pada branch sebelumnya diajadikan 1 commit pada branch master atau branch yg dituju tapi pada branch sebelumnya commitnya tetap ada
+
+* PULL REQUEST
+pull request = untuk meminta pemilik repo untuk mengambil peubahan yang kita lakukan
+ada 2 branch
+1. Main
+2. rencana konten
+membuat perubaha di rencana konten lalu pull request
+lalu membuat di merge
+
+*FORK / FORKING
+Membuat copy / duplikat dari repository orang lain (beserta history-nya)
+FORK != ONLINE
+FORK BISA MELAKUKAN PULL REQUEST 
+
+
+* GIT REMOTE
+1. CONTOH KASUS GITHUB DI HUBUNGKAN KE LOCAL
+git clone https://github.com/rizaagustin/git-tes.git //mengabil repository dari github ke local
+git log --all --decorate --oneline --graph
+Your branch is ahead of 'origin/main' by 1 commit.
+branch local lebih 1 commit dari remote
+
+git push //mengirim commit ke remote
+user.name dan email harus sama dengan github
+
+2. CONTOH KASUS DI LOCAL DI HUBUNGKAN KE GIT
+git ini pada folder local
+buat repository di github readme jgn di ceklis
+//origin nama default
+git remote add origin https://github.com/rizaagustin/git-tes-2.git
+git remote -v //mengecek git dan github sudah terhubung
+git push -u origin master //push perubahan yg ada di branch maser ke github
+
+
+3. CONTOH KASUS DI LOCAL DAN GITHUB SUDAH TERHUBUNG TETAPI FILENYA ADA YG BEDA
+ pada saat push gagal karena di remote ada perubahan
+git fetch //mengecek di remote sudah sejauh mana commit nya
+//git log --all --decorate --oneline --graph //mengecek graph di local dan remote
+//alias graph="git log --all --decorate --oneline --graph //mengecek graph di local dan remote" //mempersingkat pemanggilan kode
+ketika ada konflict lakukan git pull
+lalu lakukan manual membetulkan kode
+setelah itu git add lalu lakukan commit langsung di git pushcode 
